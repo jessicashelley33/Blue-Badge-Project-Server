@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const db = require("../db");
 
 const SavedPlaces = db.define("savedPlaces", {
+<<<<<<< HEAD
     destination: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -26,6 +27,12 @@ const SavedPlaces = db.define("savedPlaces", {
         type: DataTypes.INTEGER,
         allowNull: false,
         //unique: true,
+=======
+    places: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+>>>>>>> 91b0ee3 (1)
     } ,
 });
 

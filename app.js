@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 require('dotenv').config()
+=======
+>>>>>>> 91b0ee3 (1)
 const Express = require("express");
 const app = Express();
 const dbConnection = require("./db");
