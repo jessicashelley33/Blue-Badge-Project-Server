@@ -6,7 +6,7 @@ const dbconnection = require("./db");
 
 app.use(Express.json()); //Must be above all routes
 app.use(require("./middleware/headers"));
-app.use("/sp", controllers.savedplacescontroller);
+app.use("/save", controllers.savedplacescontroller);
 //app.use("/user", controllers.userController);
 
 dbconnection
