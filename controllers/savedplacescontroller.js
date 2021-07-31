@@ -35,7 +35,7 @@ router.post("/create", async (req, res) => {
 router.get("/get", async (req, res) => {
     let { destination, description, name, attractions, rating } = req.body;
     try{
-    const savedplaces = await SPModel.get({
+    const savedplaces = await SPModel.findAll({
         destination,
         description,
         name,
@@ -64,7 +64,7 @@ router.get("/get", async (req, res) => {
 router.put("/update", async (req, res) => {
     let { destination, description, name, attractions, rating } = req.body;
     try{
-    const savedplaces = await SPModel.put({
+    const savedplaces = await SPModel.update({
         destination,
         description,
         name,
@@ -93,7 +93,7 @@ router.put("/update", async (req, res) => {
 router.delete("/delete", async (req, res) => {
     let { destination, description, name, attractions, rating } = req.body;
     try{
-    const savedplaces = await SPModel.delete({
+    const savedplaces = await SPModel.destroy({
         destination,
         description,
         name,
