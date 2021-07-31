@@ -3,12 +3,14 @@ const Express = require("express");
 const controllers = require("./controllers");
 const app = Express();
 const dbconnection = require("./db");
+const userController = require("./controllers/userController")
+// const bodyparser = require('body-parser')
 
 app.use(Express.json()); //Must be above all routes
 app.use(require("./middleware/headers"));
 app.use("/save", controllers.savedplacescontroller);
-//app.use("/user", controllers.userController);
 
+app.use("/user", userController)
 dbconnection
     .authenticate()
     .then(() => dbconnection.sync())
@@ -19,4 +21,20 @@ dbconnection
     })
     .catch((err) => {
     console.log(`[Server]: Server crashed. Error = ${err}`);
-    });
+  });
+
+
+const middleware = require('./middleware');
+app.use(middleware.CORS);
+
+
+app.use(Express.json()); //Must be above all routes
+ app.use(require("./middleware/headers"));
+
+
+
+
+
+
+
+  

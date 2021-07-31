@@ -1,2 +1,5 @@
+const UserModel = require('./user');
 const SPModel = require('./savedPlaces');
-module.exports = {SPModel}
+module.exports = { UserModel, SPModel };
+
+
