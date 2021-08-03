@@ -61,16 +61,19 @@ router.get("/get", async (req, res) => {
 }
 });
 
-router.put("/update", async (req, res) => {
+router.put("/:id", async (req, res) => {
+    let id = req.params.id;
     let { destination, description, name, attractions, rating } = req.body;
+    console.log(req.body)
     try{
     const savedplaces = await SPModel.update({
         destination,
         description,
         name,
         attractions,
-        rating
-    });
+        rating},
+        {where:{id}, returning: true}
+    );
 
     
     res.status(201).json({
@@ -78,6 +81,7 @@ router.put("/update", async (req, res) => {
         save: savedplaces
     });
 } catch (err) {
+    console.log(err)
     if (err instanceof UniqueConstraintError) {
         res.status(409).json({
             message: "Location already updated",
@@ -90,23 +94,20 @@ router.put("/update", async (req, res) => {
 }
 });
 
-router.delete("/delete", async (req, res) => {
+router.delete("/:id", async (req, res) => {
+    let id = req.params.id;
     let { destination, description, name, attractions, rating } = req.body;
     try{
     const savedplaces = await SPModel.destroy({
-        destination,
-        description,
-        name,
-        attractions,
-        rating
-    });
-
-    
+        
+        where:{id}, returning: true}
+    ); 
     res.status(201).json({
         message: "Location succesfully deleted",
         save: savedplaces
     });
 } catch (err) {
+    console.log(err)
     if (err instanceof UniqueConstraintError) {
         res.status(409).json({
             message: "Location already deleted",
