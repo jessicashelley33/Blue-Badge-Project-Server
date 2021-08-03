@@ -63,8 +63,9 @@ router.get("/get", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
     let id = req.params.id;
+    console.log('id', id)
     let { destination, description, name, attractions, rating } = req.body;
-    console.log(req.body)
+    console.log('mybody', req.body)
     try{
     const savedplaces = await SPModel.update({
         destination,
@@ -74,9 +75,7 @@ router.put("/:id", async (req, res) => {
         rating},
         {where:{id}, returning: true}
     );
-
-    
-    res.status(201).json({
+        res.status(201).json({
         message: "Location succesfully updated",
         save: savedplaces
     });
