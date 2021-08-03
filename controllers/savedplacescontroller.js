@@ -1,122 +1,116 @@
-const { UniqueConstraintError } = require("sequelize/lib/errors");
 const router = require("express").Router();
+const { UniqueConstraintError } = require("sequelize/lib/errors");
 //const { UniqueConstraintError } = require("sequelize/types");
-const { SPModel }  = require("../models"); //SP = Saved Places
+const { SPModel } = require("../models"); //SP = Saved Places
 // get, put, delete
-router.post("/create", async (req, res) => {
-    let { destination, description, name, attractions, rating } = req.body;
-    try{
-    const savedplaces = await SPModel.create({
-        destination,
-        description,
-        name,
-        attractions,
-        rating
+let validateJWT = require("../middleware/validate");
+////////
+///////
+router.post("/create", validateJWT, async (req, res) => {
+  let { destination, description, name, attractions, rating } = req.body;
+  try {
+    let savedplaces = await SPModel.create({
+      destination,
+      description,
+      name,
+      attractions,
+      rating,
     });
 
-    
     res.status(201).json({
-        message: "Location succesfully saved",
-        save: savedplaces
+      message: "Location succesfully saved",
+      save: savedplaces,
     });
-} catch (err) {
-    if (err instanceof UniqueConstraintError) {
-        res.status(409).json({
-            message: "Location already saved",
-        });
-    } else {
+  } catch (err) {
     res.status(500).json({
-        message: "Failed to save location",
+      message: "Failed to save location",
     });
-    }
-}
+  }
 });
 
-router.get("/get", async (req, res) => {
-    let { destination, description, name, attractions, rating } = req.body;
-    try{
+router.get("/", validateJWT, async (req, res) => {
+  let { destination, description, name, attractions, rating } = req.body;
+  try {
     const savedplaces = await SPModel.findAll({
-        destination,
-        description,
-        name,
-        attractions,
-        rating
+      destination,
+      description,
+      name,
+      attractions,
+      rating,
     });
 
-    
     res.status(201).json({
-        message: "Location succesfully displayed",
-        save: savedplaces
+      message: "Location succesfully displayed",
+      save:savedplaces,
     });
-} catch (err) {
+  } catch (err) {
     if (err instanceof UniqueConstraintError) {
-        res.status(409).json({
-            message: "Location already displayed",
-        });
+      res.status(409).json({
+        message: "Location already displayed",
+      });
     } else {
-    res.status(500).json({
+      res.status(500).json({
         message: "Failed to display location",
-    });
+      });
     }
-}
+  }
 });
 
-router.put("/update", async (req, res) => {
-    let { destination, description, name, attractions, rating } = req.body;
-    try{
-    const savedplaces = await SPModel.update({
+router.put("/:id", validateJWT, async (req, res) => {
+  let { destination, description, name, attractions, rating } = req.body;
+  try {
+    let updatedPlaces = await SPModel.update(
+      {
         destination,
         description,
         name,
         attractions,
-        rating
-    });
+        rating,
+      },
+      { where: { id: req.params.id } }
+    );
 
-    
     res.status(201).json({
-        message: "Location succesfully updated",
-        save: savedplaces
+      message: "Location succesfully updated",
+      updatedPlaces,
     });
-} catch (err) {
+  } catch (err) {
     if (err instanceof UniqueConstraintError) {
-        res.status(409).json({
-            message: "Location already updated",
-        });
+      res.status(409).json({
+        message: "Location already updated",
+      });
     } else {
-    res.status(500).json({
+      res.status(500).json({
         message: "Failed to update location",
-    });
+      });
     }
-}
+  }
 });
 
-router.delete("/delete", async (req, res) => {
-    let { destination, description, name, attractions, rating } = req.body;
-    try{
+router.delete("/:id", validateJWT, async (req, res) => {
+  let { destination, description, name, attractions, rating } = req.body;
+  try {
     const savedplaces = await SPModel.destroy({
-        destination,
-        description,
-        name,
-        attractions,
-        rating
+      where: {
+        id: req.params.id,
+      },
     });
 
-    
     res.status(201).json({
-        message: "Location succesfully deleted",
-        save: savedplaces
+      message: "Location succesfully deleted",
+      save: savedplaces,
     });
-} catch (err) {
+  } catch (err) {
     if (err instanceof UniqueConstraintError) {
-        res.status(409).json({
-            message: "Location already deleted",
-        });
+      res.status(409).json({
+        message: "Location already deleted",
+      });
     } else {
-    res.status(500).json({
+      res.status(500).json({
         message: "Failed to delete location",
-    });
+      });
     }
-}
+  }
 });
 
 module.exports = router;
