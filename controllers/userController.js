@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
 
     let token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.TURTLES,
+      process.env.JWT_SECRET,
       { expiresIn: 60 * 60 * 24 }
     );
     res.status(201).json({
